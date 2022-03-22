@@ -1,6 +1,10 @@
 
 # **Headless**
 
+>* [Return to index](../README.md)
+
+<br>
+
 Cuando no se muestra un entorno grafico comunmente usado para CI/CD.
 <br>Para ejecutar con *headless* se usa
 
@@ -72,7 +76,8 @@ describe('Page Object Model', () => {
 
 # **Custom Commands**
 
-Una alternativa a Page Objects son los *custom commands*. Para usarlos o crealos se añadir en el file ```./cypress/integration/support/commands.js``` de la siguiente forma.
+Una alternativa a Page Objects son los *custom commands*. <br>
+Para usarlos o crealos se añadir en el file ```./cypress/integration/support/commands.js``` de la siguiente forma.
 
 ```JS
     // El primer parametro es el nombre del commando
@@ -95,3 +100,57 @@ El cual ahora ya se puede usar como un comando normal en cualquier test.
         })
     })
 ```
+<br>
+
+Podemos crear mas modulos de custom commands creaando un archivo en  **support** con los comandos que requeramos.<br>
+Para poder usar estos comandos en cualquier lado *debemos importar el nuevo modulo desde index.js* que se encuentra tambien en **support**.
+
+```JS
+    // Index.js flle
+    
+    import './commands'
+    import './login'
+
+    // Alternatively you can use CommonJS syntax:
+    // require('./commands')
+```
+
+Entonces podemos crear un nuevo archivo de comandos en support como por ejemplo: login.js
+
+---
+
+Suponiendo que creamos un login el cual se usa multiples veces donde se obtiene cada elemento usando fixtures.
+
+<br>
+
+![](./images/code1.png)
+
+Esto se puede facilitar usando un custom creado un custom command el cual reciba dos argumentos de email y password para usarlo multiples veces:
+
+```JS
+    Cypress.Commands.add( 'login', ( email, password ) => {
+
+        cy.fixture( 'login').then( (login) => {
+            cy.get( login.loginLink ).click()
+            cy.get( login.email ).type( email );
+            cy.get( login.password).type( password );
+            cy.get( login.loginButton ).click()
+        })
+
+    })
+```
+
+Y entonces en el caso de prueba solo invocamos estas funciones con los valores que queramos probar.
+
+```JS
+    it( 'Login test', () => {
+
+        cy.login( 'test@email.com', 'password123'); 
+
+    })
+```
+
+<br>
+
+
+![](./images/24.png)

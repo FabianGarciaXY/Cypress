@@ -1,5 +1,10 @@
 # **Checkboxes**
 
+>* [Return to index](../README.md)
+
+<br>
+
+
 Suponiendo que se requiere entrar a una seccion de alguna pagina y realizar interacciones como por ejemplo clickear algunas opciones en elementos checkbox, etc., en cypress se puede usar el comando  ```check()``` para seleccionar las casillas.
 
 ```JS
